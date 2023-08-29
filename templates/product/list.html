@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-3">
+    <div class="card shadow-custom border-0">
+      <h4 class="p-3 font-weight-bold text-grey">
+        Категории
+      </h4>
+      <ul class="list-group border-0 categories_list">
+        <li
+          {% if not requested_category %}
+            class="list-group-item border-0 p-0 selected"
+          {% else %}
+            class="list-group-item border-0 p-0 unselected"
+          {% endif %}
+        >
+          <a href="{% url 'listings:product_list' %}" class="btn btn-block text-left">Все</a> 
+        </li>
+        {% for category in categories %}
+          <li
+            {% if category.slug == requested_category.slug %}
+              class="list-group-item border-0 p-0 selected"
+            {% else %}
+              class="list-group-item border-0 p-0 unselected"
+            {% endif %}
+          >
+            <a href="{{ category.get_absolute_url }}" class="btn btn-block text-left">
+                {{ category.name }}
+            </a> 
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  
+    <br>
+
+    <div class="card shadow-custom">
+      <h4 class="p-3 font-weight-bold text-grey">
+        Сезоны
+      </h4>
+      <ul class="list-group border-0 categories_list" id="seasonsContent">
+        {% for season in seasons %}     
+        <li class="list-group-item border-0 p-0 unselected">
+          <label class="btn btn-block text-left">
+              <input type="checkbox" onclick="fetchData(event, 'season', '{{ season.id }}')" class="" id="" name="" value="{{ season.id }}">
+              <span class=""> {{ season }}</span>
+          </label>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <br>
+
+    <div class="card shadow-custom">
+      <h4 class="p-3 font-weight-bold text-grey">
+        Бренд
+      </h4>
+      <ul class="list-group border-0 categories_list" id="brandsContent">
+        {% for brand in brands %}     
+        <li class="list-group-item border-0 p-0 unselected">
+          <label class="btn btn-block text-left">
+              <input type="checkbox" onclick="fetchData(event, 'brand', '{{ brand }}')" class="" id="" name="" value="{{ brand }}">
+              <span class=""> {{ brand }}</span>
+          </label>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+     
+    <br>
+    
+    <div class="card shadow-custom">
+      <h4 class="p-3 font-weight-bold text-grey">
+        Цвет
+      </h4>
+      <ul class="list-group border-0 categories_list" id="colorsContent">
+          {% for color in colors %}      
+            <li class="list-group-item border-0 p-0 unselected">
+                <label class="btn btn-block text-left">
+                    <input type="checkbox" class="color-input__control" onclick="fetchData(event, 'color', '{{ color.id }}')" id="" name="" value="{{ color.id }}" data-disabled="false">
+                    <span class="color-input__label">
+                        <span class="color-input__text">{{ color }}</span>
+                        <span class="color-input__color color-input__color_beige"></span>
+                    </span>
+                </label>
+            </li>
+          {% endfor %}
+      </ul>
+    </div>
+
+    <br>
+
+    <!-- <button type="submit" class="btn btn-warning shadow-custom col">
+      Применить
+    </button> -->
+  </div>  
+  <div class="col-lg-9">
+    <div class="card shadow-custom border-0 mb-4">
+      <div class="card-body text-center">
+        <h2 class="font-weight-bold text-grey"> 
+          {% if requested_category %}
+            {{ requested_category.name }}
+          {% else %}
+            Наши продукты
+          {% endif %}
+        </h2>
+        <div class="bottom_line"></div>
+      </div>
+    </div>
+    <div class="row no-gutters">
+      {% for product in products %}
+        <div class="col-sm-4">
+          <div class="card product">
+            <div class="item">
+              <div class="item-image">
+                <img src="{{ product.image.url }}" alt="" class="img-fluid rounded-0">
+              </div>
+              <div class="item-text">
+                <div class="item-text-wrap">
+                  <a href="{{ product.get_absolute_url }}" class="h2 text-white text-decoration-none">
+                    <i class="fas fa-search-plus" style="font-size: 50px;"></i>
+                  </a> 
+                </div>
+              </div>
+              <div class="card-body text-center">
+                {{ product|truncatewords:2 }}
+                <hr>
+                <span>₽{{ product.price }}</span>
+                <div>
+                  <i class="fas fa-star"></i> {{ product.get_average_review_score }} / 5.0
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="col-lg-3"></div>
+</div>
+<hr>
+{% endblock content %}

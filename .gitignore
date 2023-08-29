@@ -1,0 +1,17 @@
+*.log
+*.pot
+*.pyc
+*.idea
+.idea
+__pycache__/
+db.sqlite3
+db.sqlite3-journal
+.vscode
+/static
+static/
+**/static/**
+*/static/*
+media
+**/.DS_Store
+/venv
+local_settings.py
